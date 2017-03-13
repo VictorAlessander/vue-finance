@@ -7,12 +7,16 @@
 
 <script>
   import Chart from 'chart.js'
-
   export default {
+    data () {
+      return {
+        chart: {}
+      }
+    },
     mounted () {
       var ctx = document.getElementById('myChart')
       console.log('t')
-      var chart = new Chart(ctx, {
+      this.chart = new Chart(ctx, {
         type: 'bar',
         data: {
           labels: ['Red', 'Blue', 'Yellow', 'Green', 'Purple', 'Orange'],
@@ -47,10 +51,11 @@
                 }
               }
             ]
-          }
+          },
+          responsive: false,
+          maintainAspectRatio: false
         }
       })
-      console.log(chart)
     },
     methods: {
   

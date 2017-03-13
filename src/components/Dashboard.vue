@@ -2,12 +2,13 @@
   <div>
     <h1>Dashboard</h1>
     <p>Chart.js + Vue.js dashboard</p>
-    <line-graph></line-graph>
+    <pie-chart></pie-chart>
   </div>
 </template>
 
 <script>
   import LineGraph from './LineGraph'
+  import PieChart from './PieChart'
   export default {
     data () {
       return {}
@@ -16,7 +17,8 @@
 
     },
     components: {
-      'line-graph': LineGraph
+      'line-graph': LineGraph,
+      'pie-chart': PieChart
     }
   }
 </script>
