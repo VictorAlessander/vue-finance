@@ -2,41 +2,30 @@
   <div>
     <h1>Dashboard</h1>
     <p>Chart.js + Vue.js dashboard</p>
-    <bar-graph :chartData="dataCollection" :width="250" :height="250"></bar-graph>
-    <input type="text" v-model="testVal" v-on:keyup.enter="fillData()">
+    <input type="text" v-model="mess" v-on:keyup.enter="repeat()">
+    <test :message="mess"></test>
+    <tfsa></tfsa> 
   </div>
 </template>
 
 <script>
   import barGraph from './barGraph'
+  import TFSA from './TFSA'
+  import Test from './Test'
   export default {
-    components: {
-      'bar-graph': barGraph
-    },
     data () {
       return {
-        dataCollection: null,
-        testVal: 100
+        mess: 'hello world'
       }
     },
-    mounted () {
-      this.fillData()
+    components: {
+      'bar-graph': barGraph,
+      'tfsa': TFSA,
+      'test': Test
     },
     methods: {
-      fillData () {
-        this.dataCollection = {
-          labels: ['data1'],
-          datasets: [
-            {
-              label: 'Data One',
-              backgroundColor: '#f87979',
-              data: [100]
-            }
-          ]
-        }
-      },
-      getRandomInt () {
-        return Math.floor(Math.random() * (50 - 5 + 1))
+      repeat: function () {
+        this.mess += ' test'
       }
     }
   }
@@ -45,3 +34,4 @@
 <style scoped>
   
 </style>
+
