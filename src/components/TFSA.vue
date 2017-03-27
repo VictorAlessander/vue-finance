@@ -18,7 +18,7 @@
       <h4>Your contribution limit is: {{contributionLimit}}</h4>
     </div>
     <div>
-      <bar-graph :chart-data="dataCollection" :height="250"></bar-graph>
+      <bar-graph :data="dataCollection" :height="250"></bar-graph>
     </div>
     
   </div>
@@ -47,17 +47,6 @@
         ],
         contributionLimit: 0,
         dataCollection: {}
-        // dataCollection: {
-        //   labels: [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017],
-        //   datasets: [
-        //     {
-        //       label: 'TFSA contributions',
-        //       backgroundColor: 'red',
-        //       data: [5000, 5000, 5000, 5000, 5500, 5500, 10000, 5500, 5500]
-        //     }
-        //   ]
-        // }
-
       }
     },
     mounted () {
@@ -70,7 +59,6 @@
     },
     methods: {
       updateAge () {
-        // console.log(2017 - this.birthYear)
         this.calcLimit()
         this.updateContributions()
       },
@@ -81,7 +69,6 @@
             total += this.contributions[i].amount
           }
         }
-        // console.log('total: ' + total)
         this.contributionLimit = total
       },
       getKeyArr (myKey) {
@@ -93,7 +80,6 @@
         return newArr
       },
       fillData () {
-        // this.dataCollection = {}
         this.dataCollection = {
           labels: this.getKeyArr('year'),
           datasets: [
