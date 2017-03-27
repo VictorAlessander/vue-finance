@@ -13,13 +13,12 @@
     </table>
     <div>
       <h3>Birth Year</h3>
-      <input type="text" v-model="birthYear" v-on:keyup.enter="updateAge()">
+      <input type="text" v-model="birthYear" v-on:keyup.enter="fillData()">
       <br>
       <h4>Your contribution limit is: {{contributionLimit}}</h4>
     </div>
     <div>
-      <input type="text" v-model="test">
-      <bar-graph :tester="test" :height="250"></bar-graph>
+      <bar-graph :chart-data="dataCollection" :height="250"></bar-graph>
     </div>
     
   </div>
@@ -46,7 +45,8 @@
           {year: 2016, amount: 5500},
           {year: 2017, amount: 5500}
         ],
-        contributionLimit: 0
+        contributionLimit: 0,
+        dataCollection: {}
         // dataCollection: {
         //   labels: [2009, 2010, 2011, 2012, 2013, 2014, 2015, 2016, 2017],
         //   datasets: [
@@ -59,6 +59,9 @@
         // }
 
       }
+    },
+    mounted () {
+      this.fillData()
     },
     filters: {
       currency: function (value) {
@@ -89,24 +92,18 @@
         console.log(newArr)
         return newArr
       },
-      updateContributions () {
-        console.log('update')
+      fillData () {
         // this.dataCollection = {}
-        // this.dataCollection = {
-        //   labels: this.getKeyArr('year'),
-        //   datasets: [
-        //     {
-        //       label: 'TFSA contributions',
-        //       backgroundColor: 'red',
-        //       data: this.getKeyArr('amount')
-        //     }
-        //   ]
-        // }
-        // this.dataCollection.labels = ['red']
-        // x.labels = 3
-        // this.testTry()
-
-        // this.dataCollection = 2
+        this.dataCollection = {
+          labels: this.getKeyArr('year'),
+          datasets: [
+            {
+              label: 'TFSA contributions',
+              backgroundColor: 'red',
+              data: this.getKeyArr('amount')
+            }
+          ]
+        }
       }
     }
 
