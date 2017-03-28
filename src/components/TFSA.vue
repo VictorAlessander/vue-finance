@@ -20,19 +20,27 @@
     <div>
       <bar-graph :data="dataCollection" :height="250"></bar-graph>
     </div>
+    <div>
+      <input type="range" v-model="range"> 
+      <h3>Range: {{range}}</h3>
+      <doughnut-graph :data="donut"></doughnut-graph>
+    </div>
     
   </div>
 </template>
 
 <script>
   import barGraph from './barGraph'
+  import doughnutGraph from './Doughnut'
   export default {
     components: {
-      'bar-graph': barGraph
+      'bar-graph': barGraph,
+      'doughnut-graph': doughnutGraph
     },
     data () {
       return {
         test: 'hello world',
+        range: 90,
         birthYear: 1993,
         contributions: [
           {year: 2009, amount: 5000},
@@ -47,10 +55,12 @@
         ],
         contributionLimit: 0,
         dataCollection: {}
+        // donut: {}
       }
     },
     mounted () {
       this.fillData()
+      // this.fillNut()
     },
     filters: {
       currency: function (value) {
@@ -87,6 +97,24 @@
               label: 'TFSA contributions',
               backgroundColor: 'red',
               data: this.getKeyArr('amount')
+            }
+          ]
+        }
+      }
+    },
+    computed: {
+      donut: function () {
+        return {
+          labels: ['case1', 'case2', 'case3', 'case4'],
+          datasets: [
+            {
+              backgroundColor: [
+                'red',
+                'blue',
+                'green',
+                'pink'
+              ],
+              data: [this.range, 20, 80, 10]
             }
           ]
         }

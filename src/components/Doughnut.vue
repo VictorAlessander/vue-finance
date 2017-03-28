@@ -1,7 +1,7 @@
 <script>
-  import { Bar } from 'vue-chartjs'
-  export default Bar.extend({
-    name: 'MyAweseomChart',
+  import { Doughnut } from 'vue-chartjs'
+  export default Doughnut.extend({
+    name: 'DoughnutChart',
     props: ['data'],
     mounted () {
       this.renderChart(this.data, {responsive: true, maintainAspectRatio: false})
