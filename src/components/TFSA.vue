@@ -7,8 +7,6 @@
         <h3>Birth Year</h3>
         <input type="text" v-model="birthYear" v-on:keyup.enter="fillData()">
         <br>
-        <h3>Contribution Total:</h3>
-        <input type="text" v-model="contributionTotal">
         <h4>Your contribution limit is: {{contributionLimit | currency}}</h4>
       </div>
     </div>
@@ -21,23 +19,27 @@
               <th>Annual Limit</th>
               <th>Cumulative Total</th>
               <th>Your Contribution</th>
-              <th>Contribution Total</th>
+              <th>Amount Withdrawed</th>
+              <th>Total Contributed</th>
+              <th>Cap Remaining</th>
             </tr>
           </thead>
           <tbody>
-            <tr v-for="contribution in legalContributions">
+            <tr v-for="contribution in legalContributions" v-bind:class="{overLimit: contribution.capRemaining < 0}">
               <td>{{contribution.year}}</td>
               <td>{{contribution.annualLimit | currency}}</td>
               <td>{{contribution.totalLimit | currency}}</td>
-              <td><input type="number" v-model="contribution.amount"></td>
+              <td>$ <input type="number" v-model="contribution.amount" v-on:change="fillData()"></td>
+              <td>$ <input type="number" v-model="contribution.withdrawed" v-on:change="fillData()"></td>
               <td>{{contribution.totalAmount | currency}}</td>
+              <td>{{contribution.capRemaining  | currency}}</td>
             </tr>
           </tbody>       
         </table>
         <button class="btn btn-lrg btn-success" v-on:click="updateAmounts()">Update</button>
       </div>
       <div class="col-md-12">
-        <bar-graph :data="dataCollection" :height="250"></bar-graph>
+        <bar-graph :data="dataCollection" :height="500"></bar-graph>
       </div> 
     </div>
 
@@ -64,15 +66,15 @@
         range: 90,
         birthYear: 1993,
         contributions: [
-          {year: 2009, annualLimit: 5000, amount: 0},
-          {year: 2010, annualLimit: 5000, amount: 0},
-          {year: 2011, annualLimit: 5000, amount: 0},
-          {year: 2012, annualLimit: 5000, amount: 0},
-          {year: 2013, annualLimit: 5500, amount: 0},
-          {year: 2014, annualLimit: 5500, amount: 0},
-          {year: 2015, annualLimit: 10000, amount: 0},
-          {year: 2016, annualLimit: 5500, amount: 0},
-          {year: 2017, annualLimit: 5500, amount: 0}
+          {year: 2009, annualLimit: 5000, amount: 0, withdrawed: 0},
+          {year: 2010, annualLimit: 5000, amount: 0, withdrawed: 0},
+          {year: 2011, annualLimit: 5000, amount: 0, withdrawed: 0},
+          {year: 2012, annualLimit: 5000, amount: 0, withdrawed: 0},
+          {year: 2013, annualLimit: 5500, amount: 0, withdrawed: 0},
+          {year: 2014, annualLimit: 5500, amount: 0, withdrawed: 0},
+          {year: 2015, annualLimit: 10000, amount: 0, withdrawed: 0},
+          {year: 2016, annualLimit: 5500, amount: 0, withdrawed: 0},
+          {year: 2017, annualLimit: 5500, amount: 0, withdrawed: 0}
         ],
         legalContributions: [],
         contributionLimit: 0,
@@ -87,7 +89,7 @@
     },
     filters: {
       currency: function (value) {
-        return '$' + value.toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')
+        return '$' + Number(value).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')
       }
     },
     methods: {
@@ -110,6 +112,17 @@
         }
         return newArr
       },
+      // capRemaining () {
+      //   var newArr = []
+      //   var totalLimitArr = this.getKeyArr('totalLimit')
+      //   var totalAmountArr = this.getKeyArr('totalAmount')
+      //   var withdrawArr = this.getKeyArr('withdrawed')
+      //   for (var i = 0; i <= totalLimitArr.length; i++) {
+      //     newArr.push(totalLimitArr[i] - totalAmountArr[i] - withdrawArr[i])
+      //   }
+      //   console.log(newArr)
+      //   return newArr
+      // },
       fillData () {
         this.calcLimit()
         this.legalContributions = this.contributions.filter((val) => { return val.year - this.birthYear >= 18 })
@@ -119,12 +132,13 @@
           var totalAmount = 0
           for (var i = 0; i <= index; i++) {
             totalLimit += this.legalContributions[i].annualLimit
-            totalAmount += this.legalContributions[i].amount
+            totalAmount += Number(this.legalContributions[i].amount)
           }
           contribution.totalLimit = totalLimit
           contribution.totalAmount = totalAmount
+          contribution.capRemaining = totalLimit - totalAmount - contribution.withdrawed
         })
-        console.log(this.legalContributions)
+        // console.log(this.legalContributions)
 
         this.dataCollection = {
           labels: this.getKeyArr('year'),
@@ -147,7 +161,12 @@
             {
               label: 'Total Contribution ',
               backgroundColor: 'pink',
-              data: this.getKeyArr('amount')
+              data: this.getKeyArr('totalAmount')
+            },
+            {
+              label: 'Cap Remaining ',
+              backgroundColor: 'cyan',
+              data: this.getKeyArr('capRemaining')
             }
           ]
         }
@@ -176,5 +195,15 @@
 </script>
 
 <style scoped>
-
+  input[type="number"]::-webkit-outer-spin-button, input[type="number"]::-webkit-inner-spin-button {
+      -webkit-appearance: none;
+      margin: 0;
+  }
+   
+  input[type="number"] {
+      -moz-appearance: textfield;
+  }
+  .overLimit {
+    background-color: red !important;
+  }
 </style>
