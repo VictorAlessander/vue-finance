@@ -11,6 +11,7 @@
           <ul class="nav navbar-nav navbar-right">
             <li class="active"><a href="#/">Dashboard</a></li>
             <li><a href="#/tfsa">TFSA</a></li>
+            <li><a href="#/savings">Savings</a></li>
           </ul>
         </div>
       </div>      

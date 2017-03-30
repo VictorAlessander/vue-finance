@@ -31,7 +31,7 @@
           </div>         
         </form>
       </div> -->
-      <div class="col-md-12">
+      <div class="col-md-2">
         <form>
           <div class="form-group">
             <label for="currentIncome">Current Income:</label>

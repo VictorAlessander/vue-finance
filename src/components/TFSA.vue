@@ -6,8 +6,6 @@
       <div class="col-md-6 col-md-offset-3">
         <h3>Birth Year</h3>
         <input type="text" v-model="birthYear" v-on:keyup.enter="fillData()">
-        <br>
-        <h4>Your contribution limit is: {{contributionLimit | currency}}</h4>
       </div>
     </div>
     <div class="row">
@@ -41,6 +39,15 @@
       <div class="col-md-12">
         <bar-graph :data="dataCollection" :height="500"></bar-graph>
       </div> 
+      <div class="col-md-12">
+        <!-- <h3>To Max Out: {{capRoom | currency}}</h3> -->
+        <h3>Contributions to Date: {{contributionsTotal | currency}}</h3> 
+        <br>
+        <h3>Your contribution limit is: {{contributionLimit | currency}}</h3>
+        <br>
+        <h3>Cap Remaining: {{capRemaining | currency}}</h3>
+        <doughnut-graph :data="tfsaData"></doughnut-graph>
+      </div>
     </div>
 
     <!-- <div>
@@ -79,7 +86,9 @@
         legalContributions: [],
         contributionLimit: 0,
         dataCollection: {},
-        contributionTotal: 0
+        contributionTotal: 0,
+        monthlyContribution: 0,
+        tfsaData: {}
         // donut: {}
       }
     },
@@ -90,6 +99,14 @@
     filters: {
       currency: function (value) {
         return '$' + Number(value).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')
+      }
+    },
+    computed: {
+      contributionsTotal () {
+        return this.legalContributions[this.legalContributions.length - 1].totalAmount
+      },
+      capRemaining () {
+        return this.legalContributions[this.legalContributions.length - 1].capRemaining
       }
     },
     methods: {
@@ -112,17 +129,6 @@
         }
         return newArr
       },
-      // capRemaining () {
-      //   var newArr = []
-      //   var totalLimitArr = this.getKeyArr('totalLimit')
-      //   var totalAmountArr = this.getKeyArr('totalAmount')
-      //   var withdrawArr = this.getKeyArr('withdrawed')
-      //   for (var i = 0; i <= totalLimitArr.length; i++) {
-      //     newArr.push(totalLimitArr[i] - totalAmountArr[i] - withdrawArr[i])
-      //   }
-      //   console.log(newArr)
-      //   return newArr
-      // },
       fillData () {
         this.calcLimit()
         this.legalContributions = this.contributions.filter((val) => { return val.year - this.birthYear >= 18 })
@@ -170,21 +176,17 @@
             }
           ]
         }
-      }
-    },
-    computed: {
-      donut: function () {
-        return {
-          labels: ['case1', 'case2', 'case3', 'case4'],
+        var tfsaTotal = this.legalContributions[this.legalContributions.length - 1].totalAmount
+        var capRoom = this.legalContributions[this.legalContributions.length - 1].capRemaining
+        this.tfsaData = {
+          labels: ['Cap Remaining', 'Total Contributions'],
           datasets: [
             {
               backgroundColor: [
                 'red',
-                'blue',
-                'green',
-                'pink'
+                'blue'
               ],
-              data: [this.range, 20, 80, 10]
+              data: [capRoom, tfsaTotal]
             }
           ]
         }
