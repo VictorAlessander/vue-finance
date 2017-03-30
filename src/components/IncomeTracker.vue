@@ -63,6 +63,28 @@
       <div class="col-md-12">
         <bar-graph :data="dataCollection"></bar-graph>
       </div>
+      <div class="col-md-12">
+        <table class="table table-striped">
+          <thead>
+            <tr>
+              <th>Year</th>
+              <th>Age</th>
+              <th>Income</th>
+              <th>Annual Savings</th>
+              <th>Investments</th>
+            </tr>            
+          </thead>
+          <tbody>
+            <tr v-for="finance in finances">
+              <td>{{finance.year}}</td>
+              <td>{{finance.age}}</td>
+              <td>{{finance.income | currency}}</td>
+              <td>{{finance.savings | currency}}</td>
+              <td>{{finance.investments | currency}}</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
 
 		</div>
 	</div>
@@ -82,56 +104,86 @@
         currIncome: 55000,
         incomeGrowth: 5,
         savingRate: 20,
-        dataCollection: {}
+        dataCollection: {},
+        finances: {}
+      }
+    },
+    filters: {
+      currency: function (value) {
+        return '$' + Number(value).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')
       }
     },
     mounted () {
+      this.calcFinances()
       this.fillData()
     },
     methods: {
-      calcIncome () {
-        var incomeArr = []
-        var workingLifeSpan = this.retirementAge - this.age
+      calcFinances () {
+        console.log('calcFinances')
+        var finances = []
         var income = this.currIncome
+        var investments = 0
+        var year = 2017
+        var age = this.age
+
+        var workingLifeSpan = this.retirementAge - this.age
         var incomeGrowth = this.incomeGrowth
-
-        for (var i = 0; i <= workingLifeSpan; i++) {
-          income *= (1 + incomeGrowth / 100)
-          incomeArr.push(income)
-        }
-        return incomeArr
-      },
-      calcSavings () {
-        var savingsArr = []
-        var workingLifeSpan = this.retirementAge - this.age
-        var income = this.currIncome
         var savingRate = this.savingRate
+        var ror = this.ror
 
         for (var i = 0; i <= workingLifeSpan; i++) {
+          // Calculate project annual saving
           var savings = income * (savingRate / 100)
-          savingsArr.push(savings)
+
+          finances.push({
+            'year': year,
+            'age': age,
+            'income': income,
+            'savings': savings,
+            'investments': investments
+          })
+
+          // Calculate projected annual income
+          income *= (1 + incomeGrowth / 100)
+
+          // Calculate projected annual investment
+          investments += savings
+          investments *= (1 + ror / 100)
+           // Calculate year
+          year++
+
+          // Calculate age
+          age++
         }
-        return savingsArr
+        // console.log(finances)
+        this.finances = finances
+      },
+      getKeyArr (myKey) {
+        var newArr = []
+        for (var i = 0; i < this.finances.length; i++) {
+          newArr.push(this.finances[i][myKey])
+        }
+        return newArr
       },
       fillData () {
         console.log('fill')
         this.dataCollection = {
-          labels: ['a', 'b'],
+          labels: this.getKeyArr('year'),
           datasets: [
             {
               label: 'Income',
               backgroundColor: 'red',
-              data: [1, 2]
+              data: this.getKeyArr('income')
             },
             {
               label: 'Savings',
               backgroundColor: 'blue',
-              data: [1, 2]
+              data: this.getKeyArr('savings')
             },
             {
               label: 'Investments',
               backgroundColor: 'green',
-              data: [1, 2]
+              data: this.getKeyArr('investments')
             }
           ]
         }
