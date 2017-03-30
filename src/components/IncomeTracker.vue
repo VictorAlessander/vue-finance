@@ -64,6 +64,12 @@
         <bar-graph :data="dataCollection"></bar-graph>
       </div>
       <div class="col-md-12">
+        <ul class="nav nav-tabs">
+          <li role="presentation" :class="{active: isActive(0)}"><a v-on:click="generateReport(5, 0)">5 Years</a></li>
+          <li role="presentation" :class="{active: isActive(1)}"><a v-on:click="generateReport(10, 1)">10 Years</a></li>
+          <li role="presentation" :class="{active: isActive(2)}"><a v-on:click="generateReport(20, 2)">20 Years</a></li>
+          <li role="presentation" :class="{active: isActive(3)}"><a v-on:click="generateReport(30, 3)">50 Years</a></li>
+        </ul>
         <table class="table table-striped">
           <thead>
             <tr>
@@ -75,7 +81,7 @@
             </tr>            
           </thead>
           <tbody>
-            <tr v-for="finance in finances">
+            <tr v-for="finance in reportFinances">
               <td>{{finance.year}}</td>
               <td>{{finance.age}}</td>
               <td>{{finance.income | currency}}</td>
@@ -84,6 +90,9 @@
             </tr>
           </tbody>
         </table>
+        <div>
+          <button class="btn btn-lrg btn-info" v-on:click="downloadCSV()">Download as CSV</button>
+        </div>
       </div>
 
 		</div>
@@ -100,12 +109,14 @@
       return {
         age: 23,
         retirementAge: 65,
-        ror: 5,
+        ror: 7,
         currIncome: 55000,
         incomeGrowth: 5,
-        savingRate: 20,
+        savingRate: 50,
         dataCollection: {},
-        finances: {}
+        finances: [],
+        reportFinances: [],
+        activeTab: 0
       }
     },
     filters: {
@@ -115,9 +126,20 @@
     },
     mounted () {
       this.calcFinances()
+      this.generateReport(5, 0)
       this.fillData()
     },
     methods: {
+      isActive (tab) {
+        return this.activeTab === tab
+      },
+      generateReport (yearRange, tab) {
+        console.log('generateReport')
+        this.activeTab = tab
+        this.reportFinances = this.finances.filter((val) => {
+          return val.year - 2017 < yearRange
+        })
+      },
       calcFinances () {
         console.log('calcFinances')
         var finances = []
@@ -134,6 +156,7 @@
         for (var i = 0; i <= workingLifeSpan; i++) {
           // Calculate project annual saving
           var savings = income * (savingRate / 100)
+          investments += savings
 
           finances.push({
             'year': year,
@@ -147,7 +170,7 @@
           income *= (1 + incomeGrowth / 100)
 
           // Calculate projected annual investment
-          investments += savings
+
           investments *= (1 + ror / 100)
            // Calculate year
           year++
@@ -187,7 +210,17 @@
             }
           ]
         }
-        console.log(this.dataCollection)
+        // console.log(this.dataCollection)
+      },
+      downloadCSV () {
+        // var data = this.reportFinances
+        // var csvContent = "data:text/csv;charset=utf-8,";
+        // data.forEach((infoArray, index) => {
+        //   dataString = infoArray.join(", ");
+        //   csvContent += index < data.length ? dataString+ "\n" : dataString;
+        // })
+        // var encodedUri = encodedUri(csvContent)
+        // window.open(encodedUri)
       }
     }
   }
