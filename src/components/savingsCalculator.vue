@@ -31,6 +31,8 @@
       return {
         annualIncome: 55000,
         savingRate: 20,
+        months: ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'Jun', 'Jul', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'],
+        fullMonths: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
         lineData: {}
       }
     },
@@ -46,7 +48,7 @@
     methods: {
       fillData () {
         this.lineData = {
-          labels: ['January', 'February', 'March', 'April', 'May', 'June', 'July', 'August', 'September', 'October', 'November', 'December'],
+          labels: this.months,
           datasets: [
             {
               label: 'first dataset',

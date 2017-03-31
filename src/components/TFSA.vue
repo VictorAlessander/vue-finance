@@ -103,10 +103,14 @@
     },
     computed: {
       contributionsTotal () {
-        return this.legalContributions[this.legalContributions.length - 1].totalAmount
+        var total = 0
+        if (this.legalContributions.length !== 0) total = this.legalContributions[this.legalContributions.length - 1].totalAmount
+        return total
       },
       capRemaining () {
-        return this.legalContributions[this.legalContributions.length - 1].capRemaining
+        var total = 0
+        if (this.legalContributions.length !== 0) total = this.legalContributions[this.legalContributions.length - 1].capRemaining
+        return total
       }
     },
     methods: {
