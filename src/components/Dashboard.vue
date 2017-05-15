@@ -1,20 +1,23 @@
 <template>
   <div>
     <h1>Financial Dashboard</h1>
-    <income-tracker></income-tracker>
+    <div>
+      <ul>
+        <li><a href="/#/IncomeTracker">Income Tracker</a></li>
+        <li><a href="/#/TFSA">TFSA</a></li>
+        <li><a href="/#/savings">Savings</a></li>
+        <li><a href="/#/compound">Compound</a></li>
+      </ul>
+    </div>
   </div>
 </template>
 
 <script>
-  import IncomeTracker from './IncomeTracker'
   export default {
-    components: {
-      'income-tracker': IncomeTracker
-    }
+
   }
 </script>
 
 <style scoped>
 
 </style>
-
