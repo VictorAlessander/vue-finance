@@ -1,6 +1,6 @@
 <template>
   <div>
-    <h1>Compound Calculator</h1>
+    <h1>Starbucks Calculator</h1>
     <ul>
       <li>Starbucks Coffee Price: $4</li>
       <li>Number of times a week: 5</li>
@@ -11,7 +11,7 @@
         <li>Weekly Cost: $20</li>
         <li>Annual Cost: $1040</li>
         <li>ROR: 5%</li>
-        <li>test: <counter :number="4000"></counter></li>
+        <li>test: <counter :number="2000"></counter></li>
       </ul>
     </div>
     <div>
@@ -25,7 +25,7 @@
       </ul>
       <div class="row">
         <div class="col-md-8">
-          <line-chart :data="compoundData" :height="500"></line-chart>         
+          <line-chart :data="stackbucksData" :height="500"></line-chart>         
         </div>
         <div class="col-md-4">
           <h2>Stats:</h2>
@@ -45,18 +45,16 @@
 
 <script>
   import lineChart from './lineChart'
-  import Counter from './Counter'
 
   export default {
     components: {
-      'line-chart': lineChart,
-      'counter': Counter
+      'line-chart': lineChart
     },
     data () {
       return {
         activeTab: 0,
         reportYearRange: 5,
-        compoundData: {},
+        stackbucksData: {},
         finances: [],
         reportFinances: []
       }
@@ -88,7 +86,7 @@
         this.reportFinances = this.finances = finances
       },
       fillData () {
-        this.compoundData = {
+        this.stackbucksData = {
           labels: this.getKeyArr(this.reportFinances, 'year'),
           datasets: [
             {
