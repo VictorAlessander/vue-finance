@@ -7,6 +7,7 @@
         <li><a href="/#/TFSA">TFSA</a></li>
         <li><a href="/#/savings">Savings</a></li>
         <li><a href="/#/starbucks">Starbucks</a></li>
+        <li><a href="/#/compound">Compound Calculator</a></li>
       </ul>
     </div>
   </div>

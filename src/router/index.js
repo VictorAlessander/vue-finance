@@ -5,6 +5,7 @@ import TFSA from '@/components/TFSA'
 import savingsCalculator from '@/components/savingsCalculator'
 import IncomeTracker from '@/components/IncomeTracker'
 import StarbucksCalculator from '@/components/StarbucksCalculator'
+import CompoundCalculator from '@/components/CompoundCalculator'
 
 Vue.use(Router)
 
@@ -34,6 +35,11 @@ export default new Router({
       path: '/starbucks',
       name: 'Starbuck',
       component: StarbucksCalculator
+    },
+    {
+      path: '/compound',
+      name: 'Compound',
+      component: CompoundCalculator
     }
   ]
 })

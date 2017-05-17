@@ -25,7 +25,7 @@
       </ul>
       <div class="row">
         <div class="col-md-8">
-          <line-chart :data="stackbucksData" :height="500"></line-chart>         
+          <line-chart :data="stackbucksData" :options="options" :height="500"></line-chart>         
         </div>
         <div class="col-md-4">
           <h2>Stats:</h2>
@@ -56,7 +56,33 @@
         reportYearRange: 5,
         stackbucksData: {},
         finances: [],
-        reportFinances: []
+        reportFinances: [],
+        options: {
+          animation: false,
+          responsive: true,
+          maintainAspectRatio: false,
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  callback: (label) => {
+                    return this.currency(label)
+                  }
+                }
+              }
+            ]
+          },
+          tooltips: {
+            callbacks: {
+              label: (tooltipItem, data) => {
+                var value = data.datasets[0].data[tooltipItem.index]
+                // var label = data.labels[tooltipItem.index]
+                var moneyValue = this.currency(value)
+                return ' ' + moneyValue
+              }
+            }
+          }
+        }
       }
     },
     filters: {
