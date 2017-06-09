@@ -1,7 +1,8 @@
 <template>
   <div>
     <h1>Compound Calculator</h1>
-    <line-chart :data="compoundData"></line-chart>
+    <input type="number" v-model="initialAmount"/>
+    <line-chart :data="compoundData" :options="options"></line-chart>
   </div>
 </template>
 
@@ -16,10 +17,32 @@
       return {
         compoundData: {},
         finances: [],
+        initialAmount: 10000,
         options: {
           animation: false,
           responsive: true,
-          maintainAspectRatio: false
+          maintainAspectRatio: false,
+          scales: {
+            yAxes: [
+              {
+                ticks: {
+                  callback: (label) => {
+                    return this.currency(label)
+                  }
+                }
+              }
+            ]
+          },
+          tooltips: {
+            callbacks: {
+              label: (tooltipItem, data) => {
+                var value = data.datasets[0].data[tooltipItem.index]
+                // var label = data.labels[tooltipItem.index]
+                var moneyValue = this.currency(value)
+                return ' ' + moneyValue
+              }
+            }
+          }
         }
       }
     },
@@ -28,11 +51,14 @@
         for (var i = 0; i <= 10; i++) {
           this.finances.push({
             'year': i * 5,
-            '0%': 1000,
-            '5%': 1000 * (1.05 ** i),
-            '10%': 1000 * (1.1 ** i)
+            '0%': this.initialAmount,
+            '5%': this.initialAmount * (1.05 ** i),
+            '10%': this.initialAmount * (1.1 ** i)
           })
         }
+      },
+      currency (value) {
+        return '$' + Number(value).toFixed(2).replace(/(\d)(?=(\d{3})+\.)/g, '$1,')
       },
       fillData () {
         this.compoundData = {

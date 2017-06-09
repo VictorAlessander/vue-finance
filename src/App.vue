@@ -16,7 +16,8 @@
         </div>
       </div>       
     </nav>
-    <div class="container">
+    <side-menu></side-menu>
+    <div id="view-wrapper" class="container-fluid">    
       <router-view></router-view>
     </div>
     
@@ -24,18 +25,31 @@
 </template>
 
 <script>
+  import sideMenu from './components/SideMenu'
 
-export default {
-  name: 'app'
-}
+  export default {
+    name: 'app',
+    components: {
+      'side-menu': sideMenu
+    }
+  }
 </script>
 
 <style>
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
-  /*margin-top: 60px;*/
-}
+  #app {
+    font-family: 'Avenir', Helvetica, Arial, sans-serif;
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    color: #2c3e50;
+    /*margin-top: 60px;*/
+  }
+
+  #view-wrapper {
+    position: absolute;
+    left: 250px;
+  }
+
+  .navbar {
+    margin-bottom: 0 !important;
+  }
 </style>
