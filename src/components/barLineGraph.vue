@@ -4,7 +4,7 @@
     name: 'Bar-Line Graph',
     props: ['data'],
     mounted () {
-      this.renderChart(this.datam {responsive: false, maintainAspectRatio: false})
+      this.renderChart(this.data {responsive: false, maintainAspectRatio: false})
     },
     watch: {
       data: function () {
